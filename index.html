@@ -374,23 +374,31 @@
 
   <script>
     (function () {
-      // Read chest number from URL path, e.g. /a100 → "A100"
+      // 1. URL ൽ നിന്നും Chest Number എടുക്കുന്നു (ഉദാഹരണത്തിന്: /A100 അല്ലെങ്കിൽ ?id=A100)
       var path = window.location.pathname.replace(/^\//, '').trim();
-      var chestNo = path ? path.toUpperCase() : null;
+      var params = new URLSearchParams(window.location.search);
+      var queryId = params.get('id') || params.get('chest');
 
-      if (chestNo) {
+      var chestNo = path ? path : queryId;
+
+      if (chestNo && chestNo.length > 0) {
+        chestNo = chestNo.toUpperCase();
+
+        // 2. Chest Number സ്ക്രീനിൽ കാണിക്കുന്നു
         var box = document.getElementById('chestBox');
         var num = document.getElementById('chestNum');
         num.textContent = chestNo;
         box.classList.add('visible');
 
-        // Update Sports link to include chest number exactly as requested
+        // 3. Sports & Arts ബട്ടണുകളുടെ ലിങ്കിൽ Chest Number ആഡ് ചെയ്യുന്നു
         var sportsCard = document.getElementById('sportsCard');
         sportsCard.href = 'https://sportsfest.festie.app/results/candidates/' + chestNo;
 
-        // Update Arts link to include chest number exactly as requested
         var artsCard = document.getElementById('artsCard');
         artsCard.href = 'https://artsfest.festie.app/results/candidates/' + chestNo;
+
+        // 4. മാജിക്! മുകളിലെ URL ബാറിൽ നിന്ന് /A100 മായ്ച്ചു കളയുന്നു, എന്നാൽ ഡാറ്റ നഷ്‌ടപ്പെടില്ല
+        window.history.replaceState({}, document.title, "/");
       }
     })();
   </script>
