@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MASLAC Fest 2025</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #D4A017;
+      --gold-light: #F5C842;
+      --deep-red: #8B1A1A;
+      --crimson: #C0392B;
+      --cream: #FDF6E3;
+      --dark-green: #1A4D2E;
+      --green: #2E7D32;
+      --off-white: #FAF3E0;
+      --dark: #1C1008;
+    }
+
+    html, body {
+      min-height: 100%;
+      background: var(--dark);
+      font-family: 'Rajdhani', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Animated background pattern */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 20%, rgba(212,160,23,0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(139,26,26,0.1) 0%, transparent 50%),
+        repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 30px,
+          rgba(212,160,23,0.02) 30px,
+          rgba(212,160,23,0.02) 31px
+        );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Top ornament */
+    .ornament {
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .ornament-line {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-bottom: 0.5rem;
+    }
+    .ornament-line::before,
+    .ornament-line::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+    }
+    .ornament-diamond {
+      width: 8px;
+      height: 8px;
+      background: var(--gold);
+      transform: rotate(45deg);
+    }
+
+    /* Header */
+    .fest-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: var(--gold);
+      text-transform: uppercase;
+      border: 1px solid rgba(212,160,23,0.4);
+      padding: 5px 18px;
+      border-radius: 2px;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 10vw, 5.5rem);
+      font-weight: 900;
+      color: var(--cream);
+      line-height: 0.95;
+      letter-spacing: -1px;
+      text-align: center;
+      margin-bottom: 0.25rem;
+    }
+    h1 span {
+      color: var(--gold);
+      display: block;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      letter-spacing: 5px;
+      color: rgba(253,246,227,0.45);
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    /* Chest number badge */
+    .chest-display {
+      background: rgba(212,160,23,0.12);
+      border: 1px solid rgba(212,160,23,0.35);
+      border-radius: 4px;
+      padding: 10px 28px;
+      margin-bottom: 2.5rem;
+      text-align: center;
+      display: none;
+    }
+    .chest-display.visible { display: block; }
+    .chest-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: rgba(212,160,23,0.7);
+      text-transform: uppercase;
+    }
+    .chest-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1.1;
+    }
+
+    /* Cards */
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    @media (max-width: 480px) {
+      .cards { grid-template-columns: 1fr; max-width: 340px; }
+    }
+
+    .card {
+      position: relative;
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      aspect-ratio: 1 / 1.15;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .card:active { transform: translateY(-1px); }
+
+    /* Sports card - deep red/crimson */
+    .card-sports {
+      background: linear-gradient(155deg, #6B0F0F 0%, #3A0808 60%, #1A0404 100%);
+      border: 1px solid rgba(192,57,43,0.4);
+    }
+    .card-sports::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 70% 30%, rgba(192,57,43,0.25) 0%, transparent 60%),
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    /* Arts card - dark green/forest */
+    .card-arts {
+      background: linear-gradient(155deg, #0D3320 0%, #071A10 60%, #030D08 100%);
+      border: 1px solid rgba(46,125,50,0.35);
+    }
+    .card-arts::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 30% 70%, rgba(46,125,50,0.2) 0%, transparent 60%),
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      gap: 1rem;
+    }
+
+    .card-icon {
+      font-size: 3.5rem;
+      line-height: 1;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+      margin-bottom: 0.25rem;
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 5vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-align: center;
+      line-height: 1;
+    }
+    .card-sports .card-title { color: #FF8A80; }
+    .card-arts .card-title { color: #A5D6A7; }
+
+    .card-ml {
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-align: center;
+      opacity: 0.65;
+    }
+    .card-sports .card-ml { color: #FFCDD2; }
+    .card-arts .card-ml { color: #C8E6C9; }
+
+    .card-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 8px 20px;
+      border-radius: 2px;
+      margin-top: 0.5rem;
+      transition: opacity 0.2s;
+    }
+    .card:hover .card-cta { opacity: 0.85; }
+    .card-sports .card-cta {
+      background: rgba(192,57,43,0.25);
+      border: 1px solid rgba(255,138,128,0.4);
+      color: #FF8A80;
+    }
+    .card-arts .card-cta {
+      background: rgba(46,125,50,0.2);
+      border: 1px solid rgba(165,214,167,0.4);
+      color: #A5D6A7;
+    }
+
+    /* Gold accent corners on cards */
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 8px; left: 8px; right: 8px; bottom: 8px;
+      border: 1px solid rgba(212,160,23,0.1);
+      border-radius: 4px;
+      pointer-events: none;
+    }
+
+    /* Footer */
+    .footer-note {
+      margin-top: 2.5rem;
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: rgba(253,246,227,0.2);
+      text-transform: uppercase;
+      text-align: center;
+    }
+    .footer-note span { color: rgba(212,160,23,0.5); }
+
+    /* Decorative dots */
+    .dots {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      margin: 1.5rem 0;
+    }
+    .dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(212,160,23,0.3);
+    }
+    .dot:nth-child(3) { background: rgba(212,160,23,0.7); width: 6px; height: 6px; }
+
+    /* Pulse animation on load */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fest-badge  { animation: fadeUp 0.5s ease 0.1s both; }
+    h1           { animation: fadeUp 0.5s ease 0.2s both; }
+    .subtitle    { animation: fadeUp 0.5s ease 0.3s both; }
+    .chest-display { animation: fadeUp 0.5s ease 0.35s both; }
+    .dots        { animation: fadeUp 0.5s ease 0.4s both; }
+    .cards       { animation: fadeUp 0.5s ease 0.45s both; }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <div class="ornament">
+      <div class="ornament-line">
+        <div class="ornament-diamond"></div>
+        <div class="ornament-diamond" style="opacity:0.5;transform:rotate(45deg) scale(0.6)"></div>
+        <div class="ornament-diamond"></div>
+      </div>
+    </div>
+
+    <div class="fest-badge">MASLAC Fest · 2025</div>
+
+    <h1>MASLAC<span>ARTS</span></h1>
+    <p class="subtitle">Annual Cultural Celebration</p>
+
+    <div class="chest-display" id="chestBox">
+      <div class="chest-label">Chest Number</div>
+      <div class="chest-number" id="chestNum">—</div>
+    </div>
+
+    <div class="dots">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+
+    <div class="cards">
+      <a class="card card-sports" id="sportsCard" href="https://sportsfest.festie.app" target="_blank">
+        <div class="card-inner">
+          <div class="card-icon">🏆</div>
+          <div class="card-title">Sports</div>
+          <div class="card-ml">സ്‌പോർട്‌സ്</div>
+          <div class="card-cta">Enter →</div>
+        </div>
+      </a>
+
+      <a class="card card-arts" id="artsCard" href="https://artsfest.festie.app" target="_blank">
+        <div class="card-inner">
+          <div class="card-icon">🎭</div>
+          <div class="card-title">Arts</div>
+          <div class="card-ml">കലോത്സവം</div>
+          <div class="card-cta">Enter →</div>
+        </div>
+      </a>
+    </div>
+
+    <p class="footer-note">MASLAC · <span>maslacartsfest.vercel.app</span></p>
+
+  </div>
+
+  <script>
+    (function () {
+      // Read chest number from URL path, e.g. /a100 → "A100"
+      var path = window.location.pathname.replace(/^\//, '').trim();
+      var chestNo = path ? path.toUpperCase() : null;
+
+      if (chestNo) {
+        var box = document.getElementById('chestBox');
+        var num = document.getElementById('chestNum');
+        num.textContent = chestNo;
+        box.classList.add('visible');
+
+        // Update Sports link to include chest number exactly as requested
+        var sportsCard = document.getElementById('sportsCard');
+        sportsCard.href = 'https://sportsfest.festie.app/results/candidates/' + chestNo;
+
+        // Update Arts link to include chest number exactly as requested
+        var artsCard = document.getElementById('artsCard');
+        artsCard.href = 'https://artsfest.festie.app/results/candidates/' + chestNo;
+      }
+    })();
+  </script>
+</body>
+</html>
