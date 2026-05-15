@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes" />
   <title> MASLAC Arts Fest 2026</title>
   <style>
     /* Reset & Base Styles */
@@ -31,16 +31,46 @@
       overflow-x: hidden;
     }
 
+    /* Zoom Controls Styling */
+    .zoom-controls {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      display: flex;
+      gap: 5px;
+      z-index: 100;
+    }
+
+    .zoom-btn {
+      background: var(--white);
+      color: var(--primary);
+      border: 1px solid var(--primary-border);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .zoom-btn:hover {
+      background: var(--primary);
+      color: var(--white);
+    }
+
     .page {
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 2rem 1.5rem;
+      padding: 4rem 1.5rem 2rem 1.5rem; /* Added top padding for zoom buttons */
       max-width: 800px;
       margin: 0 auto;
       width: 100%;
+      transition: transform 0.3s ease;
+      transform-origin: top center;
     }
 
     /* --- INITIAL LOAD ANIMATIONS --- */
@@ -232,7 +262,14 @@
   </style>
 </head>
 <body>
-  <div class="page">
+
+  <div class="zoom-controls">
+    <button class="zoom-btn" onclick="setZoom(1)">1x</button>
+    <button class="zoom-btn" onclick="setZoom(2)">2x</button>
+    <button class="zoom-btn" onclick="setZoom(3)">3x</button>
+  </div>
+
+  <div class="page" id="mainPage">
 
     <div class="fest-badge animate-1">Official Portal</div>
     <h1 class="animate-2">Maslac Arts Fest'26 </h1>
@@ -244,15 +281,15 @@
     </div>
 
     <div class="cards">
-      <a class="card card-sports animate-4" id="sportsCard" href="https://sportsfest.festie.app" target="_blank">
+      <a class="card card-sports animate-4" id="sportsCard" href="https://kamasports.festie.app" target="_blank">
         <div class="card-icon">🏆</div>
         <div class="card-title">Sports</div>
-           </a>
+      </a>
 
-      <a class="card card-arts animate-5" id="artsCard" href="https://artsfest.festie.app" target="_blank">
+      <a class="card card-arts animate-5" id="artsCard" href="https://arts.festie.app" target="_blank">
         <div class="card-icon">🎭</div>
         <div class="card-title">Arts</div>
-             </a>
+      </a>
     </div>
 
     <p class="footer-note animate-5">MASLAC • System Authenticated</p>
@@ -260,6 +297,19 @@
   </div>
 
   <script>
+    // Zoom Functionality
+    function setZoom(scaleValue) {
+      const page = document.getElementById('mainPage');
+      page.style.transform = `scale(${scaleValue})`;
+      
+      // Adjust margin so scaling doesn't push content off the top of the screen
+      if(scaleValue > 1) {
+        page.style.marginTop = `${(scaleValue - 1) * 30}%`; 
+      } else {
+        page.style.marginTop = '0';
+      }
+    }
+
     (function () {
       // Logic to grab candidate number from URL
       var path = window.location.pathname.replace(/^\//, '').trim();
@@ -276,11 +326,12 @@
         num.textContent = chestNo;
         box.classList.add('visible');
 
+        // Updated JS paths to match new domains
         var sportsCard = document.getElementById('sportsCard');
-        sportsCard.href = 'https://sportsfest.festie.app/results/candidates/' + chestNo;
+        sportsCard.href = 'https://kamasports.festie.app/results/candidates/' + chestNo;
 
         var artsCard = document.getElementById('artsCard');
-        artsCard.href = 'https://artsfest.festie.app/results/candidates/' + chestNo;
+        artsCard.href = 'https://arts.festie.app/results/candidates/' + chestNo;
 
         window.history.replaceState({}, document.title, "/");
       }
