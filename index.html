@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes" />
-  <title>KAMA '26 | MASLAC Arts & Sports Fest</title>
+  <title>KAMA '26 | Arts & Sports Fest</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,7 +12,8 @@
   <style>
     /* --- COLOR THEME & VARIABLES --- */
     :root {
-      --bg-color: #F8F6F0;       
+      --bg-color-1: #F8F6F0;       
+      --bg-color-2: #EAE6D8;
       --primary-color: #6A1A21;  
       --secondary-color: #2E4733; 
       --text-main: #1A1A1A;
@@ -32,18 +33,30 @@
 
     body, html {
       height: 100%;
-      background-color: var(--bg-color);
       font-family: var(--font-main);
       color: var(--text-main);
       overflow-x: hidden;
       scroll-behavior: smooth;
     }
 
+    /* Animated Gradient Background */
+    body {
+      background: linear-gradient(-45deg, var(--bg-color-1), var(--bg-color-2), var(--white), var(--bg-color-1));
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
     /* --- LOADING SCREEN --- */
     #loader {
       position: fixed;
       inset: 0;
-      background: var(--bg-color);
+      background: var(--bg-color-1);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -53,13 +66,14 @@
     }
     
     .loader-logo {
-      width: 100px;
+      width: 110px;
       height: auto;
-      animation: pulseLogo 1.5s infinite alternate;
+      /* Enhanced Loading Animation */
+      animation: spinPulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     }
 
     .loader-text {
-      margin-top: 15px;
+      margin-top: 20px;
       font-family: var(--font-display);
       font-size: 1.1rem;
       color: var(--primary-color);
@@ -68,9 +82,25 @@
       font-weight: 700;
     }
 
-    @keyframes pulseLogo {
-      0% { transform: scale(0.9); opacity: 0.7; }
-      100% { transform: scale(1.1); opacity: 1; }
+    /* Animated Loading Dots */
+    .loader-text span {
+      animation: loadingDots 1.5s infinite linear;
+      display: inline-block;
+      min-width: 20px;
+      text-align: left;
+    }
+
+    @keyframes spinPulse {
+      0% { transform: scale(0.85) rotate(-5deg); opacity: 0.8; filter: drop-shadow(0 5px 10px rgba(106, 26, 33, 0.3)); }
+      50% { transform: scale(1.1) rotate(5deg); opacity: 1; filter: drop-shadow(0 15px 25px rgba(106, 26, 33, 0.5)); }
+      100% { transform: scale(0.85) rotate(-5deg); opacity: 0.8; filter: drop-shadow(0 5px 10px rgba(106, 26, 33, 0.3)); }
+    }
+
+    @keyframes loadingDots {
+      0% { content: "."; opacity: 0.2; }
+      33% { content: ".."; opacity: 0.6; }
+      66% { content: "..."; opacity: 1; }
+      100% { content: ""; opacity: 0; }
     }
 
     #loader.hidden {
@@ -106,16 +136,22 @@
     }
 
     .main-logo {
-      width: 150px;
+      width: 160px;
       height: auto;
       margin-bottom: 1rem;
-      filter: drop-shadow(0 8px 12px rgba(0,0,0,0.1));
-      transition: transform 0.3s ease;
+      /* Smooth Floating Animation for Main Logo */
+      animation: floatLogo 4s ease-in-out infinite;
+    }
+
+    @keyframes floatLogo {
+      0% { transform: translateY(0px); filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1)); }
+      50% { transform: translateY(-12px); filter: drop-shadow(0 20px 20px rgba(0,0,0,0.15)); }
+      100% { transform: translateY(0px); filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1)); }
     }
 
     .fest-title {
       font-family: var(--font-display);
-      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-size: clamp(2rem, 6vw, 3.8rem);
       color: var(--primary-color);
       line-height: 1.1;
       font-weight: 700;
@@ -124,10 +160,18 @@
     }
 
     .fest-subtitle {
-      font-size: 1rem;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--secondary-color);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .fest-location {
+      font-size: 0.95rem;
       font-weight: 400;
       color: var(--text-muted);
-      letter-spacing: 1px;
+      margin-top: 5px;
     }
 
     /* --- CHEST NUMBER DISPLAY --- */
@@ -196,12 +240,26 @@
       justify-content: center;
       position: relative;
       overflow: hidden;
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       z-index: 1;
     }
 
+    .portal-card::after {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: -1;
+    }
+
     .portal-card:hover {
-      transform: translateY(-8px);
+      transform: translateY(-10px) scale(1.02);
+    }
+    
+    .portal-card:hover::after {
+      opacity: 1;
     }
 
     /* Sports Theme */
@@ -223,11 +281,11 @@
     .card-icon {
       font-size: 3.5rem;
       margin-bottom: 1rem;
-      transition: transform 0.3s ease;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .portal-card:hover .card-icon {
-      transform: scale(1.15) rotate(5deg);
+      transform: scale(1.2) translateY(-5px) rotate(8deg);
     }
 
     .portal-card h2 {
@@ -256,8 +314,8 @@
     }
 
     .portal-card:hover .portal-btn {
-      transform: scale(1.05);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     }
 
     /* --- FOOTER --- */
@@ -276,52 +334,55 @@
     /* ========================================= */
     @media (max-width: 600px) {
       .app-container {
-        padding: 2.5rem 1rem; /* Reduced padding on mobile */
+        padding: 2.5rem 1rem; 
       }
       
       .main-logo {
-        width: 110px; /* Smaller logo */
+        width: 120px; 
       }
 
       .fest-title {
-        font-size: 1.8rem; /* Smaller main heading */
+        font-size: 2.2rem; 
+      }
+
+      .fest-subtitle {
+        font-size: 0.9rem;
       }
       
       .chest-display {
-        padding: 1.2rem 1.5rem; /* Smaller padding for chest box */
+        padding: 1.2rem 1.5rem; 
         margin-bottom: 2rem;
       }
 
       .chest-number {
-        font-size: 2.2rem; /* Smaller chest number */
+        font-size: 2.2rem; 
       }
 
       .cards-grid {
-        grid-template-columns: 1fr; /* Stack cards vertically */
-        gap: 1rem; /* Reduced gap between cards */
+        grid-template-columns: 1fr; 
+        gap: 1.2rem; 
       }
 
       .portal-card {
-        padding: 1.8rem 1rem; /* Much smaller box padding on mobile */
+        padding: 2rem 1rem; 
         border-radius: 16px;
       }
 
       .card-icon {
-        font-size: 2.8rem; /* Smaller icons inside box */
-        margin-bottom: 0.5rem;
+        font-size: 2.8rem; 
       }
 
       .portal-card h2 {
-        font-size: 1.6rem; /* Smaller box title */
+        font-size: 1.8rem; 
       }
 
       .portal-card p {
-        font-size: 0.85rem; /* Smaller subtitle */
-        margin-bottom: 1.2rem;
+        font-size: 0.85rem; 
+        margin-bottom: 1.5rem;
       }
 
       .portal-btn {
-        padding: 10px 20px; /* Smaller button */
+        padding: 10px 22px; 
         font-size: 0.75rem;
       }
     }
@@ -331,15 +392,17 @@
 
   <div id="loader">
     <img src="kamapng.png" alt="Loading Logo" class="loader-logo" onerror="this.style.display='none'">
-    <div class="loader-text">Initializing</div>
+    <div class="loader-text">KAMA is Loading<span></span></div>
   </div>
 
   <div class="app-container" id="mainApp">
     
     <header class="header">
-      <img src="kamapng.png" alt="Maslac Arts Fest Logo" class="main-logo" onerror="this.alt='Logo Image Missing'">
-      <h1 class="fest-title">Maslac Arts Fest '26</h1>
-      <p class="fest-subtitle">Malik Deenar Islamic Academy</p>
+      <img src="kamapng.png" alt="KAMA Arts Fest Logo" class="main-logo" onerror="this.alt='Logo Image Missing'">
+      
+      <h1 class="fest-title">KAMA Arts Fest '26</h1>
+      <p class="fest-subtitle">MASLAC</p>
+      <p class="fest-location">Malik Deenar Islamic Academy</p>
     </header>
 
     <div class="chest-display" id="chestBox">
@@ -364,18 +427,18 @@
     </div>
 
     <footer class="footer">
-      MASLAC • System Authenticated
+      System Authenticated • Powered by MASLAC
     </footer>
 
   </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      // Remove Loader smoothly after 1.8 seconds
+      // Remove Loader smoothly after 2.2 seconds to show off the animation
       setTimeout(() => {
         document.getElementById('loader').classList.add('hidden');
         document.getElementById('mainApp').classList.add('visible');
-      }, 1800);
+      }, 2200);
 
       // Fetch Chest Number from URL
       const path = window.location.pathname.replace(/^\//, '').trim();
