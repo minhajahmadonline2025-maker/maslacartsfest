@@ -3,339 +3,403 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes" />
-  <title> MASLAC Arts Fest 2026</title>
+  <title>KAMA '26 | MASLAC Arts & Sports Fest</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  
   <style>
-    /* Reset & Base Styles */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+    /* --- COLOR THEME & VARIABLES --- */
     :root {
-      --bg-color: #FAFAFA;
+      --bg-color: #F8F6F0;       
+      --primary-color: #6A1A21;  
+      --secondary-color: #2E4733; 
+      --text-main: #1A1A1A;
+      --text-muted: #555555;
       --white: #FFFFFF;
-      --primary: #661b1b;
-      --primary-muted: rgba(102, 27, 27, 0.6);
-      --primary-border: rgba(102, 27, 27, 0.15);
-      --primary-shadow: rgba(102, 27, 27, 0.15);
+      --card-shadow: rgba(0, 0, 0, 0.08);
       
-      /* Standard Official Fonts */
-      --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      --font-serif: Georgia, "Times New Roman", Times, serif;
+      --font-main: 'Outfit', sans-serif;
+      --font-display: 'Space Grotesk', sans-serif;
     }
 
-    html, body {
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body, html {
       height: 100%;
       background-color: var(--bg-color);
-      font-family: var(--font-sans);
-      color: var(--primary);
+      font-family: var(--font-main);
+      color: var(--text-main);
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* --- LOADING SCREEN --- */
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-color);
       display: flex;
       flex-direction: column;
-      overflow-x: hidden;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.8s ease, visibility 0.8s;
+    }
+    
+    .loader-logo {
+      width: 100px;
+      height: auto;
+      animation: pulseLogo 1.5s infinite alternate;
     }
 
-    /* Zoom Controls Styling */
-    .zoom-controls {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      display: flex;
-      gap: 5px;
-      z-index: 100;
+    .loader-text {
+      margin-top: 15px;
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--primary-color);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 700;
     }
 
-    .zoom-btn {
-      background: var(--white);
-      color: var(--primary);
-      border: 1px solid var(--primary-border);
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    @keyframes pulseLogo {
+      0% { transform: scale(0.9); opacity: 0.7; }
+      100% { transform: scale(1.1); opacity: 1; }
     }
 
-    .zoom-btn:hover {
-      background: var(--primary);
-      color: var(--white);
+    #loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
     }
 
-    .page {
-      flex: 1;
+    /* --- MAIN CONTENT CONTAINER --- */
+    .app-container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 4rem 1.5rem 2rem 1.5rem; /* Added top padding for zoom buttons */
-      max-width: 800px;
+      min-height: 100vh;
+      padding: 4rem 1.5rem;
+      max-width: 900px;
       margin: 0 auto;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .app-container.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* --- HEADER SECTION --- */
+    .header {
+      text-align: center;
+      margin-bottom: 2.5rem;
       width: 100%;
-      transition: transform 0.3s ease;
-      transform-origin: top center;
     }
 
-    /* --- INITIAL LOAD ANIMATIONS --- */
-    @keyframes fadeUp {
-      0% { opacity: 0; transform: translateY(20px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Apply staggered animations to page elements */
-    .animate-1 { animation: fadeUp 0.8s ease forwards; opacity: 0; animation-delay: 0.1s; }
-    .animate-2 { animation: fadeUp 0.8s ease forwards; opacity: 0; animation-delay: 0.25s; }
-    .animate-3 { animation: fadeUp 0.8s ease forwards; opacity: 0; animation-delay: 0.4s; }
-    .animate-4 { animation: fadeUp 0.8s ease forwards; opacity: 0; animation-delay: 0.55s; }
-    .animate-5 { animation: fadeUp 0.8s ease forwards; opacity: 0; animation-delay: 0.7s; }
-
-    /* Header Styling */
-    .fest-badge {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 2px;
-      color: var(--primary-muted);
-      text-transform: uppercase;
+    .main-logo {
+      width: 150px;
+      height: auto;
       margin-bottom: 1rem;
-      border: 1px solid var(--primary-border);
-      padding: 4px 16px;
-      border-radius: 20px;
+      filter: drop-shadow(0 8px 12px rgba(0,0,0,0.1));
+      transition: transform 0.3s ease;
     }
 
-    h1 {
-      font-family: var(--font-serif);
-      font-size: clamp(2.5rem, 8vw, 4.5rem);
-      font-weight: bold;
-      text-align: center;
+    .fest-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      color: var(--primary-color);
       line-height: 1.1;
+      font-weight: 700;
+      letter-spacing: -1px;
       margin-bottom: 0.5rem;
-      letter-spacing: -0.5px;
     }
 
-    .subtitle {
-      font-size: 16px;
+    .fest-subtitle {
+      font-size: 1rem;
       font-weight: 400;
-      color: var(--primary-muted);
-      text-align: center;
-      margin-bottom: 3rem;
+      color: var(--text-muted);
       letter-spacing: 1px;
     }
 
-    /* Chest Number Display */
+    /* --- CHEST NUMBER DISPLAY --- */
     .chest-display {
       background: var(--white);
-      border: 1px solid var(--primary-border);
-      border-radius: 8px;
-      padding: 1.2rem 3rem;
+      border-radius: 16px;
+      padding: 1.5rem 4rem;
       margin-bottom: 3rem;
       text-align: center;
-      display: none; /* Hidden until JS runs */
-      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-    }
-    .chest-display.visible {
-      display: block;
-      animation: fadeUp 0.6s ease forwards;
-    }
-    .chest-label {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      color: var(--primary-muted);
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-    .chest-number {
-      font-family: var(--font-serif);
-      font-size: 2.2rem;
-      font-weight: bold;
-      color: var(--primary);
-    }
-
-    /* Cards Container */
-    .cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      width: 100%;
-      max-width: 600px;
-    }
-
-    @media (max-width: 500px) {
-      .cards { grid-template-columns: 1fr; max-width: 320px; gap: 1.5rem; }
-    }
-
-    /* Card Base & Animations */
-    .card {
-      border-radius: 12px;
-      text-decoration: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 3.5rem 1.5rem;
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      box-shadow: 0 15px 30px var(--card-shadow);
+      border: 1px solid rgba(0,0,0,0.03);
+      display: none;
       position: relative;
       overflow: hidden;
     }
-
-    .card:hover {
-      transform: translateY(-8px);
+    
+    .chest-display::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
     }
 
-    /* Sports Card - White Theme */
-    .card-sports {
-      background: var(--white);
-      border: 1px solid var(--primary-border);
-      color: var(--primary);
-    }
-    .card-sports:hover {
-      box-shadow: 0 12px 30px var(--primary-shadow);
-      border-color: var(--primary-muted);
+    .chest-display.visible {
+      display: block;
+      animation: slideUp 0.6s ease forwards;
     }
 
-    /* Arts Card - Maroon Theme */
-    .card-arts {
-      background: var(--primary);
-      color: var(--white);
-      border: 1px solid transparent;
-    }
-    .card-arts:hover {
-      box-shadow: 0 12px 30px rgba(102, 27, 27, 0.35);
+    @keyframes slideUp {
+      0% { opacity: 0; transform: translateY(15px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
 
-    .card-icon {
-      font-size: 3.5rem;
-      margin-bottom: 1.2rem;
-      transition: transform 0.3s ease;
-    }
-    .card:hover .card-icon {
-      transform: scale(1.1);
-    }
-
-    .card-title {
-      font-family: var(--font-serif);
-      font-size: 2rem;
-      font-weight: bold;
-      margin-bottom: 1.5rem;
-    }
-
-    /* Button Animations */
-    .card-cta {
-      font-size: 13px;
+    .chest-label {
+      font-size: 0.8rem;
       font-weight: 600;
-      letter-spacing: 1.5px;
+      color: var(--text-muted);
       text-transform: uppercase;
-      padding: 10px 28px;
-      border-radius: 40px;
-      transition: all 0.3s ease;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .chest-number {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      color: var(--text-main);
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    /* --- PORTAL CARDS --- */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      width: 100%;
+    }
+
+    .portal-card {
+      text-decoration: none;
+      border-radius: 20px;
+      padding: 3rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
       z-index: 1;
     }
 
-    .card-sports .card-cta {
-      border: 1px solid var(--primary-border);
-      background: transparent;
-      color: var(--primary);
-    }
-    .card-sports:hover .card-cta {
-      background-color: var(--primary);
-      color: var(--white);
-      border-color: var(--primary);
+    .portal-card:hover {
+      transform: translateY(-8px);
     }
 
-    .card-arts .card-cta {
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      background: transparent;
+    /* Sports Theme */
+    .card-sports {
+      background: var(--secondary-color);
       color: var(--white);
+      box-shadow: 0 12px 25px rgba(46, 71, 51, 0.25);
     }
-    .card-arts:hover .card-cta {
-      background-color: var(--white);
-      color: var(--primary);
-      border-color: var(--white);
+    .card-sports .portal-btn { color: var(--secondary-color); }
+
+    /* Arts Theme */
+    .card-arts {
+      background: var(--primary-color);
+      color: var(--white);
+      box-shadow: 0 12px 25px rgba(106, 26, 33, 0.25);
+    }
+    .card-arts .portal-btn { color: var(--primary-color); }
+
+    .card-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      transition: transform 0.3s ease;
     }
 
-    /* Footer */
-    .footer-note {
-      margin-top: 5rem;
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 1px;
-      color: var(--primary-muted);
+    .portal-card:hover .card-icon {
+      transform: scale(1.15) rotate(5deg);
+    }
+
+    .portal-card h2 {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .portal-card p {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      margin-bottom: 2rem;
+      letter-spacing: 0.5px;
+    }
+
+    .portal-btn {
+      background: var(--white);
+      padding: 12px 28px;
+      border-radius: 40px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+
+    .portal-card:hover .portal-btn {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    }
+
+    /* --- FOOTER --- */
+    .footer {
+      margin-top: 4rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    /* ========================================= */
+    /* 📱 RESPONSIVE DESIGN FOR MOBILE DEVICES  */
+    /* ========================================= */
+    @media (max-width: 600px) {
+      .app-container {
+        padding: 2.5rem 1rem; /* Reduced padding on mobile */
+      }
+      
+      .main-logo {
+        width: 110px; /* Smaller logo */
+      }
+
+      .fest-title {
+        font-size: 1.8rem; /* Smaller main heading */
+      }
+      
+      .chest-display {
+        padding: 1.2rem 1.5rem; /* Smaller padding for chest box */
+        margin-bottom: 2rem;
+      }
+
+      .chest-number {
+        font-size: 2.2rem; /* Smaller chest number */
+      }
+
+      .cards-grid {
+        grid-template-columns: 1fr; /* Stack cards vertically */
+        gap: 1rem; /* Reduced gap between cards */
+      }
+
+      .portal-card {
+        padding: 1.8rem 1rem; /* Much smaller box padding on mobile */
+        border-radius: 16px;
+      }
+
+      .card-icon {
+        font-size: 2.8rem; /* Smaller icons inside box */
+        margin-bottom: 0.5rem;
+      }
+
+      .portal-card h2 {
+        font-size: 1.6rem; /* Smaller box title */
+      }
+
+      .portal-card p {
+        font-size: 0.85rem; /* Smaller subtitle */
+        margin-bottom: 1.2rem;
+      }
+
+      .portal-btn {
+        padding: 10px 20px; /* Smaller button */
+        font-size: 0.75rem;
+      }
     }
   </style>
 </head>
 <body>
 
-  <div class="zoom-controls">
-    <button class="zoom-btn" onclick="setZoom(1)">1x</button>
-    <button class="zoom-btn" onclick="setZoom(2)">2x</button>
-    <button class="zoom-btn" onclick="setZoom(3)">3x</button>
+  <div id="loader">
+    <img src="kamapng.png" alt="Loading Logo" class="loader-logo" onerror="this.style.display='none'">
+    <div class="loader-text">Initializing</div>
   </div>
 
-  <div class="page" id="mainPage">
-
-    <div class="fest-badge animate-1">Official Portal</div>
-    <h1 class="animate-2">Maslac Arts Fest'26 </h1>
-    <p class="subtitle animate-3">Malik Deenar Islamic Academy</p>
+  <div class="app-container" id="mainApp">
+    
+    <header class="header">
+      <img src="kamapng.png" alt="Maslac Arts Fest Logo" class="main-logo" onerror="this.alt='Logo Image Missing'">
+      <h1 class="fest-title">Maslac Arts Fest '26</h1>
+      <p class="fest-subtitle">Malik Deenar Islamic Academy</p>
+    </header>
 
     <div class="chest-display" id="chestBox">
-      <div class="chest-label">Candidate Identification</div>
+      <div class="chest-label">Candidate Identifier</div>
       <div class="chest-number" id="chestNum">—</div>
     </div>
 
-    <div class="cards">
-      <a class="card card-sports animate-4" id="sportsCard" href="https://kama.festie.app" target="_blank">
+    <div class="cards-grid">
+      <a href="https://kamasports.festie.app" class="portal-card card-sports" id="sportsCard">
         <div class="card-icon">🏆</div>
-        <div class="card-title">Sports</div>
+        <h2>Sports</h2>
+        <p>Enter the Arena</p>
+        <span class="portal-btn">Open Portal</span>
       </a>
 
-      <a class="card card-arts animate-5" id="artsCard" href="https://arts.festie.app" target="_blank">
+      <a href="https://kama.festie.app" class="portal-card card-arts" id="artsCard">
         <div class="card-icon">🎭</div>
-        <div class="card-title">Arts</div>
+        <h2>Arts</h2>
+        <p>Explore the Stage</p>
+        <span class="portal-btn">Open Portal</span>
       </a>
     </div>
 
-    <p class="footer-note animate-5">MASLAC • System Authenticated</p>
+    <footer class="footer">
+      MASLAC • System Authenticated
+    </footer>
 
   </div>
 
   <script>
-    // Zoom Functionality
-    function setZoom(scaleValue) {
-      const page = document.getElementById('mainPage');
-      page.style.transform = `scale(${scaleValue})`;
-      
-      // Adjust margin so scaling doesn't push content off the top of the screen
-      if(scaleValue > 1) {
-        page.style.marginTop = `${(scaleValue - 1) * 30}%`; 
-      } else {
-        page.style.marginTop = '0';
-      }
-    }
+    document.addEventListener("DOMContentLoaded", () => {
+      // Remove Loader smoothly after 1.8 seconds
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('hidden');
+        document.getElementById('mainApp').classList.add('visible');
+      }, 1800);
 
-    (function () {
-      // Logic to grab candidate number from URL
-      var path = window.location.pathname.replace(/^\//, '').trim();
-      var params = new URLSearchParams(window.location.search);
-      var queryId = params.get('id') || params.get('chest');
-
-      var chestNo = path ? path : queryId;
+      // Fetch Chest Number from URL
+      const path = window.location.pathname.replace(/^\//, '').trim();
+      const params = new URLSearchParams(window.location.search);
+      let queryId = params.get('id') || params.get('chest');
+      let chestNo = path ? path : queryId;
 
       if (chestNo && chestNo.length > 0) {
         chestNo = chestNo.toUpperCase();
 
-        var box = document.getElementById('chestBox');
-        var num = document.getElementById('chestNum');
+        const box = document.getElementById('chestBox');
+        const num = document.getElementById('chestNum');
         num.textContent = chestNo;
         box.classList.add('visible');
 
-        // Updated JS paths to match new domains
-        var sportsCard = document.getElementById('sportsCard');
-        sportsCard.href = 'https://kama.festie.app/results/candidates/' + chestNo;
+        const sportsCard = document.getElementById('sportsCard');
+        sportsCard.href = `https://kamasports.festie.app/results/candidates/${chestNo}`;
 
-        var artsCard = document.getElementById('artsCard');
-        artsCard.href = 'https://arts.festie.app/results/candidates/' + chestNo;
+        const artsCard = document.getElementById('artsCard');
+        artsCard.href = `https://kama.festie.app/results/candidates/${chestNo}`;
 
         window.history.replaceState({}, document.title, "/");
       }
-    })();
+    });
   </script>
 </body>
 </html>
